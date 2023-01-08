@@ -57,7 +57,7 @@ async fn delete(pool: web::Data<DbPool>, id: web::Path<u64>) -> Result<HttpRespo
         delete_product(id.into_inner(), &conn)
     })
     .await?
-    .map(|_user| HttpResponse::Ok().json(_user))
+    .map(|_product| HttpResponse::Ok().json(_product))
     .map_err(actix_web::error::ErrorInternalServerError)?;
 
     Ok(product)

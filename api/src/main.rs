@@ -37,11 +37,11 @@ async fn main() -> std::io::Result<()> {
             .route("/", web::get().to(|| async { "Actix REST API" }))
             .service(
                 web::scope("/api")
-                    .service(user::index)
-                    .service(user::select)
-                    .service(user::create)
-                    .service(user::update)
-                    .service(user::delete)
+                    .service(product::index)
+                    .service(product::select)
+                    .service(product::create)
+                    .service(product::update)
+                    .service(product::delete)
             )
     })
     .bind(("127.0.0.1", 8080))?
