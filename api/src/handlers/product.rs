@@ -1,12 +1,17 @@
-use actix_web::{get, post, patch, delete, web, HttpResponse, Error};
-use crate::{models::product::ProductPayload, ops::product::*};
 use crate::DbPool;
+use crate::models::product::*;
+use crate::schema::produto::dsl::*;
+use crate::models::product::ProductPayload;
+use diesel::prelude::*;
+use actix_web::{get, post, patch, delete, web, HttpResponse, Error};
+
 
 #[get("/products")]
 async fn index(pool: web::Data<DbPool>) -> Result<HttpResponse, Error> {
     let products = web::block(move || {
-        let conn = pool.get()?;
-        find_all(&conn)
+        let conn = pool.get().unwrap(); // TODO: fix unwrap
+        let result: Result<Vec<Product>, diesel::result::Error> = produto.load::<Product>(&conn);
+        return result;
     })
     .await?
     .map_err(actix_web::error::ErrorInternalServerError)?;
@@ -14,11 +19,12 @@ async fn index(pool: web::Data<DbPool>) -> Result<HttpResponse, Error> {
     Ok(HttpResponse::Ok().json(products))
 }
 
-#[get("/products/{id}")]
-async fn select(pool: web::Data<DbPool>, id: web::Path<u64>) -> Result<HttpResponse, Error> {
+#[get("/products/{prod_id}")]
+async fn select(pool: web::Data<DbPool>, prod_id: web::Path<u64>) -> Result<HttpResponse, Error> {
     let product = web::block(move || {
-        let conn = pool.get()?; 
-        find_by_id(id.into_inner(), &conn)
+        let conn = pool.get().unwrap(); // TODO: fix unwrap
+        let result: Result<Option<Product>, diesel::result::Error> = produto.find(prod_id.into_inner()).first(&conn).optional();
+        return result;
     })
     .await?
     .map_err(actix_web::error::ErrorInternalServerError)?;
@@ -28,9 +34,21 @@ async fn select(pool: web::Data<DbPool>, id: web::Path<u64>) -> Result<HttpRespo
 
 #[post("/products")]
 async fn create(pool: web::Data<DbPool>, payload: web::Json<ProductPayload>) -> Result<HttpResponse, Error> {
+
+    let prodPayload = payload.into_inner();
+    let new_product = NewProduct {
+        nome: prodPayload.nome,
+        preco: prodPayload.preco,
+        descricao: prodPayload.descricao,
+        foto: prodPayload.foto,
+        formatoImagem: prodPayload.formatoImagem,
+        dataCriacao: chrono::Local::now().naive_local(),
+    };
+
     let product = web::block(move || {
-        let conn = pool.get()?;
-        add_product(payload.into_inner(), &conn)
+        let conn = pool.get().unwrap(); // TODO: fix unwrap
+        let result: Result<usize, diesel::result::Error> = diesel::insert_into(produto).values(new_product).execute(&conn);
+        return result;
     })
     .await?
     .map_err(actix_web::error::ErrorInternalServerError)?;
@@ -38,11 +56,12 @@ async fn create(pool: web::Data<DbPool>, payload: web::Json<ProductPayload>) -> 
     Ok(HttpResponse::Created().json(product))
 }
 
-#[patch("/products/{id}")]
-async fn update(pool: web::Data<DbPool>, id: web::Path<u64>, payload: web::Json<ProductPayload>) -> Result<HttpResponse, Error> {
+#[patch("/products/{prod_id}")]
+async fn update(pool: web::Data<DbPool>, prod_id: web::Path<u64>, payload: web::Json<ProductPayload>) -> Result<HttpResponse, Error> {
     let product = web::block(move || {
-        let conn = pool.get()?;
-        update_product(id.into_inner(), payload.into_inner(), &conn)
+        let conn = pool.get().unwrap(); // TODO: fix unwrap
+        let result: Result<usize, diesel::result::Error> = diesel::update(produto.find(prod_id.into_inner())).set(payload.into_inner()).execute(&conn);
+        return result;
     })
     .await?
     .map_err(actix_web::error::ErrorInternalServerError)?;
@@ -50,15 +69,15 @@ async fn update(pool: web::Data<DbPool>, id: web::Path<u64>, payload: web::Json<
     Ok(HttpResponse::Ok().json(product))
 }
 
-#[delete("/products/{id}")]
-async fn delete(pool: web::Data<DbPool>, id: web::Path<u64>) -> Result<HttpResponse, Error> {
+#[delete("/products/{prod_id}")]
+async fn delete(pool: web::Data<DbPool>, prod_id: web::Path<u64>) -> Result<HttpResponse, Error> {
     let product = web::block(move || {
-        let conn = pool.get()?;
-        delete_product(id.into_inner(), &conn)
+        let conn = pool.get().unwrap(); // TODO: fix unwrap
+        let result: Result<usize, diesel::result::Error> = diesel::delete(produto.find(prod_id.into_inner())).execute(&conn);
+        return result;
     })
     .await?
-    .map(|_product| HttpResponse::Ok().json(_product))
     .map_err(actix_web::error::ErrorInternalServerError)?;
 
-    Ok(product)
+    Ok(HttpResponse::Ok().json(product))
 }

@@ -6,7 +6,6 @@ use dotenv::dotenv;
 mod handlers;
 mod models;
 mod schema;
-mod ops;
 
 use handlers::product;
 
