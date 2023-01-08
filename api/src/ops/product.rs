@@ -24,7 +24,7 @@ pub fn find_by_id(_id: u64, conn: &MysqlConnection) -> Result<Option<Product>, D
     Ok(res)
 }
 
-pub fn add_user(user: ProductPayload, conn: &MysqlConnection) -> Result<usize, DbError> {
+pub fn add_product(user: ProductPayload, conn: &MysqlConnection) -> Result<usize, DbError> {
     use crate::schema::produto::dsl::*;
 
     let new_user = NewProduct {
@@ -40,7 +40,7 @@ pub fn add_user(user: ProductPayload, conn: &MysqlConnection) -> Result<usize, D
     Ok(res)
 }
 
-pub fn update_user(_id: u64, user: ProductPayload, conn: &MysqlConnection) -> Result<usize, DbError> {
+pub fn update_product(_id: u64, user: ProductPayload, conn: &MysqlConnection) -> Result<usize, DbError> {
     use crate::schema::produto::dsl::*;
 
     let res = diesel::update(produto.find(_id))
@@ -50,7 +50,7 @@ pub fn update_user(_id: u64, user: ProductPayload, conn: &MysqlConnection) -> Re
     Ok(res)
 }
 
-pub fn delete_user(_id: u64, conn: &MysqlConnection) -> Result<usize, DbError> {
+pub fn delete_product(_id: u64, conn: &MysqlConnection) -> Result<usize, DbError> {
     use crate::schema::produto::dsl::*;
 
     let res = diesel::delete(produto.find(_id))
