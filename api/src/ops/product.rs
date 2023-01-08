@@ -27,14 +27,14 @@ pub fn find_by_id(_id: u64, conn: &MysqlConnection) -> Result<Option<Product>, D
 pub fn add_product(payload: ProductPayload, conn: &MysqlConnection) -> Result<usize, DbError> {
     use crate::schema::produto::dsl::*;
 
-    let new_user = NewProduct {
+    let new_product = NewProduct {
         name: payload.name,
         email: payload.email,
         created_at: chrono::Local::now().naive_local(),
     };
 
     let res = diesel::insert_into(produto)
-        .values(new_user)
+        .values(new_product)
         .execute(conn)?;
 
     Ok(res)
