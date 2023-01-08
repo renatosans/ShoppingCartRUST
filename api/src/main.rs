@@ -8,7 +8,7 @@ mod models;
 mod schema;
 mod ops;
 
-use handlers::user;
+use handlers::product;
 
 #[macro_use]
 extern crate diesel;
