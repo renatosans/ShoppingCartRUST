@@ -4,7 +4,7 @@ diesel::table! {
     produto (id) {
         id -> Unsigned<Bigint>,
         nome -> Varchar,
-        preco -> Decimal,
+        preco -> Float8,
         descricao -> Varchar,
         foto -> Longtext,
         formatoImagem -> Varchar,
