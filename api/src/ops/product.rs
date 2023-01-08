@@ -28,9 +28,12 @@ pub fn add_product(payload: ProductPayload, conn: &MysqlConnection) -> Result<us
     use crate::schema::produto::dsl::*;
 
     let new_product = NewProduct {
-        name: payload.name,
-        email: payload.email,
-        created_at: chrono::Local::now().naive_local(),
+        nome: payload.nome,
+        preco: payload.preco,
+        descricao: payload.descricao,
+        foto: payload.foto,
+        formatoImagem: payload.formatoImagem,
+        dataCriacao: chrono::Local::now().naive_local(),
     };
 
     let res = diesel::insert_into(produto)

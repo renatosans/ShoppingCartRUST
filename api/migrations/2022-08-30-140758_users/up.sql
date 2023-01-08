@@ -1,7 +1,10 @@
 CREATE TABLE produto (
-    id serial NOT NULL,
-    name character varying(255) NOT NULL,
-    email character varying(255) NOT NULL,
-    created_at timestamp NOT NULL,
+    id SERIAL NOT NULL,
+    nome CHARACTER VARYING(255) NOT NULL,
+    preco DECIMAL(10, 2) NOT NULL,
+    descricao CHARACTER VARYING(255) NOT NULL,
+    foto LONGTEXT,
+    formatoImagem CHARACTER VARYING(45),
+    dataCriacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT produto_pkey PRIMARY KEY (id)
 );

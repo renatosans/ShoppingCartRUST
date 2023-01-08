@@ -3,8 +3,11 @@
 diesel::table! {
     produto (id) {
         id -> Unsigned<Bigint>,
-        name -> Varchar,
-        email -> Varchar,
-        created_at -> Timestamp,
+        nome -> Varchar,
+        preco -> Decimal,
+        descricao -> Varchar,
+        foto -> Longtext,
+        formatoImagem -> Varchar,
+        dataCriacao -> Timestamp,
     }
 }
