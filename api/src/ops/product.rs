@@ -24,12 +24,12 @@ pub fn find_by_id(_id: u64, conn: &MysqlConnection) -> Result<Option<Product>, D
     Ok(res)
 }
 
-pub fn add_product(user: ProductPayload, conn: &MysqlConnection) -> Result<usize, DbError> {
+pub fn add_product(payload: ProductPayload, conn: &MysqlConnection) -> Result<usize, DbError> {
     use crate::schema::produto::dsl::*;
 
     let new_user = NewProduct {
-        name: user.name,
-        email: user.email,
+        name: payload.name,
+        email: payload.email,
         created_at: chrono::Local::now().naive_local(),
     };
 
@@ -40,11 +40,11 @@ pub fn add_product(user: ProductPayload, conn: &MysqlConnection) -> Result<usize
     Ok(res)
 }
 
-pub fn update_product(_id: u64, user: ProductPayload, conn: &MysqlConnection) -> Result<usize, DbError> {
+pub fn update_product(_id: u64, payload: ProductPayload, conn: &MysqlConnection) -> Result<usize, DbError> {
     use crate::schema::produto::dsl::*;
 
     let res = diesel::update(produto.find(_id))
-        .set(user)
+        .set(payload)
         .execute(conn)?;
 
     Ok(res)
