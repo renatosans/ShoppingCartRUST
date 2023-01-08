@@ -1,10 +1,10 @@
-use serde::{Serialize, Deserialize};
-use crate::schema::users;
 use chrono;
+use crate::schema::produto;
+use serde::{Serialize, Deserialize};
 
 
 #[derive(Debug, Serialize, Deserialize, Queryable)]
-pub struct User {
+pub struct Product {
     pub id: u64,
     pub name: String,
     pub email: String,
@@ -12,16 +12,16 @@ pub struct User {
 }
 
 #[derive(Debug, Insertable)]
-#[table_name = "users"]
-pub struct NewUser {
+#[table_name = "produto"]
+pub struct NewProduct {
     pub name: String,
     pub email: String,
     pub created_at: chrono::NaiveDateTime
 }
 
 #[derive(Debug, AsChangeset, Serialize, Deserialize)]
-#[table_name = "users"]
-pub struct UserPayload {
+#[table_name = "produto"]
+pub struct ProductPayload {
     pub name: String,
     pub email: String
 }
