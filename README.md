@@ -3,6 +3,7 @@ Fullstack rust project using wasm target on frontend.
 
 ## Frontend development using LEPTOS FRAMEWORK is pending, only backend available for now
 
+![screenshot](public/img/screenshot.png)
 
 ## Steps to run the project
 
