@@ -1,8 +1,10 @@
 # ShoppingCartRUST
 Fullstack rust project using wasm target on frontend.
 
+## Frontend development using LEPTOS FRAMEWORK is pending, only backend available for now
 
-# Steps to run the project
+
+## Steps to run the project
 
 - cargo build
 - trunk serve
